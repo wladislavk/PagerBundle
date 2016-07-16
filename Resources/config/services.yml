@@ -1,0 +1,10 @@
+services:
+    vkr_pager.pager:
+        class: VKR\PagerBundle\Services\Pager
+        arguments:
+            - "@vkr_settings.settings_retriever"
+    vkr_pager.pager_twig_extension:
+        class: VKR\PagerBundle\Twig\PagerTwigExtension
+        public: false
+        tags:
+            - { name: twig.extension }

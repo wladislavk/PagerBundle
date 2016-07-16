@@ -1,0 +1,20 @@
+{# This file is included for demo purposes only. The bundle code does not touch this file in any way #}
+{% macro pager(pagerProps) %}
+    {% if pagerProps.numberOfPages is defined and pagerProps.numberOfPages > 1 %}
+        <nav>
+            <ul class="pagination">
+                <li><a href="{{ pagerProps.uriWithoutPage | page(1) }}" aria-label="First"><span aria-hidden="true">&laquo;</span></a></li>
+                {% for i in range(pagerProps.currentPage - 2, pagerProps.currentPage + 2) %}
+                    {% if i > 0 and i <= pagerProps.numberOfPages %}
+                        {% if i == pagerProps.currentPage %}
+                            <li class="active">{{ i }}</li>
+                        {% else %}
+                            <li><a href="{{ pagerProps.uriWithoutPage | page(i) }}">{{ i }}</a></li>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                <li><a href="{{ pagerProps.uriWithoutPage | page(pagerProps.numberOfPages) }}" aria-label="Last"><span aria-hidden="true">&raquo;</span></a></li>
+            </ul>
+        </nav>
+    {% endif %}
+{% endmacro %}

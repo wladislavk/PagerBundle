@@ -1,39 +1,35 @@
 <?php
 namespace VKR\PagerBundle\Tests\Services;
 
+use PHPUnit\Framework\TestCase;
 use VKR\PagerBundle\Services\Pager;
 use VKR\PagerBundle\TestHelpers\PageableParser;
 use VKR\SettingsBundle\Exception\SettingNotFoundException;
 use VKR\SettingsBundle\Exception\WrongSettingTypeException;
 use VKR\SettingsBundle\Services\SettingsRetriever;
 
-class PagerTest extends \PHPUnit_Framework_TestCase
+class PagerTest extends TestCase
 {
-    protected $settings = [
+    private $settings = [
         'records_per_page' => 5,
         'invalid_setting' => 'foo',
     ];
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $settingsRetriever;
-
-    /**
      * @var PageableParser
      */
-    protected $parser;
+    private $parser;
 
     /**
      * @var Pager
      */
-    protected $pager;
+    private $pager;
 
     public function setUp()
     {
-        $this->mockSettingsRetriever();
+        $settingsRetriever = $this->mockSettingsRetriever();
         $this->parser = new PageableParser(11);
-        $this->pager = new Pager($this->settingsRetriever);
+        $this->pager = new Pager($settingsRetriever);
     }
 
     public function testGetPagerProps()
@@ -87,20 +83,15 @@ class PagerTest extends \PHPUnit_Framework_TestCase
     public function testGetPagerPropsWithBadSetting()
     {
         $uri = 'http://test.com?page=2&a=1';
-        $exceptionReflection = new \ReflectionClass(WrongSettingTypeException::class);
-        $this->setExpectedException($exceptionReflection->getName());
-        $pagerProps = $this->pager->getPagerProps($this->parser, $uri, 'invalid_setting');
+        $this->expectException(WrongSettingTypeException::class);
+        $this->pager->getPagerProps($this->parser, $uri, 'invalid_setting');
     }
 
-    protected function mockSettingsRetriever()
+    private function mockSettingsRetriever()
     {
-        $this->settingsRetriever = $this
-            ->getMockBuilder(SettingsRetriever::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->settingsRetriever->expects($this->any())
-            ->method('get')
-            ->will($this->returnCallback([$this, 'getMockedSettingValueCallback']));
+        $settingsRetriever = $this->createMock(SettingsRetriever::class);
+        $settingsRetriever->method('get')->will($this->returnCallback([$this, 'getMockedSettingValueCallback']));
+        return $settingsRetriever;
     }
 
     public function getMockedSettingValueCallback($settingName)

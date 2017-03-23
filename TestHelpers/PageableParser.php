@@ -8,7 +8,7 @@ class PageableParser implements PageableInterface
     /**
      * @var int
      */
-    protected $numberOfRecords;
+    private $numberOfRecords;
 
     public function __construct($numberOfRecords)
     {

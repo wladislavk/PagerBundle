@@ -17,7 +17,7 @@ class Pager
     /**
      * @var SettingsRetriever
      */
-    protected $settingsRetriever;
+    private $settingsRetriever;
 
     /**
      * @param SettingsRetriever $settingsRetriever
@@ -68,7 +68,7 @@ class Pager
      * @param array $additionalArguments
      * @return int
      */
-    protected function getNumberOfPages(
+    private function getNumberOfPages(
         PageableInterface $parser,
         $recordsPerPage,
         array $additionalArguments
@@ -89,7 +89,7 @@ class Pager
      * @param int $recordsPerPage
      * @return int
      */
-    protected function getFirstResult($currentPage, $recordsPerPage)
+    private function getFirstResult($currentPage, $recordsPerPage)
     {
         if ($recordsPerPage == -1) {
             return 0;
@@ -103,7 +103,7 @@ class Pager
      * @param string $requestUri
      * @return int
      */
-    protected function getCurrentPage($requestUri)
+    private function getCurrentPage($requestUri)
     {
         $regexp = '/[\?&]page=(\d+)/';
         preg_match($regexp, $requestUri, $matches);
@@ -119,7 +119,7 @@ class Pager
      * @param string $requestUri
      * @return string
      */
-    protected function getCurrentUriWithoutPage($requestUri)
+    private function getCurrentUriWithoutPage($requestUri)
     {
         $regexp = '/page=\d+?&?/'; // select 'page=' followed by a number and optional & sign
         $uriWithoutPage = preg_replace($regexp, '', $requestUri);
@@ -131,7 +131,7 @@ class Pager
      * @param string $uriWithoutPage
      * @return string
      */
-    protected function appendCharacterToUri($uriWithoutPage)
+    private function appendCharacterToUri($uriWithoutPage)
     {
         if (!strstr($uriWithoutPage, '?')) {
             return '?';
@@ -151,7 +151,7 @@ class Pager
      * @return int
      * @throws \Exception
      */
-    protected function getRecordsPerPage($recordsPerPageData)
+    private function getRecordsPerPage($recordsPerPageData)
     {
         $recordsPerPage = $recordsPerPageData;
         if (!is_int($recordsPerPageData)) {
@@ -163,5 +163,4 @@ class Pager
         }
         return $recordsPerPage;
     }
-
 }
